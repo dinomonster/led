@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 
 class ColorPickerPainter extends CustomPainter {
-  ColorPickerPainter(this.points);
-
-  final List<Offset> points;
-
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = new Paint()
-      ..color = Colors.black
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 5.0;
-    for (int i = 0; i < points.length - 1; i++) {
-      if (points[i] != null && points[i + 1] != null)
-        canvas.drawLine(points[i], points[i + 1], paint);
-    }
+    Paint paint = Paint();
+    LinearGradient vertical = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Colors.white,
+          Colors.black,
+        ],
+        tileMode: TileMode.clamp);
+    LinearGradient horizontal = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.centerRight,
+        colors: [
+          Colors.white,
+          Colors.black,
+        ],
+        tileMode: TileMode.clamp);
+    horizontal.createShader(rect)
+    val composeShader = ComposeShader(horizontal, vertical, PorterDuff.Mode.MULTIPLY)
+    paint..shader = ;
   }
 
   @override
@@ -29,20 +37,7 @@ class ColorPicker extends StatefulWidget {
 }
 
 class ColorPickerState extends State<ColorPicker> {
-  List<Offset> _points = <Offset>[];
-
   Widget build(BuildContext context) {
-    return new GestureDetector(
-      onPanUpdate: (DragUpdateDetails details) {
-        setState(() {
-          RenderBox referenceBox = context.findRenderObject();
-          Offset localPosition =
-              referenceBox.globalToLocal(details.globalPosition);
-          _points = new List.from(_points)..add(localPosition);
-        });
-      },
-      onPanEnd: (DragEndDetails details) => _points.add(null),
-      child: new CustomPaint(painter: ColorPickerPainter(_points)),
-    );
+    return;
   }
 }
