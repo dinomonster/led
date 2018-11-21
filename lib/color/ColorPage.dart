@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:led/utils/ScreenUtil.dart';
+import 'package:led/widgets/ColorMainPicker.dart';
 import 'package:led/widgets/ColorPicker.dart';
+import 'package:led/widgets/Hue.dart';
 import 'package:led/widgets/ProgressButton.dart';
 
 ///
@@ -21,7 +24,9 @@ class ColorPage extends StatefulWidget {
     return ColorState();
   }
 }
+
 const double kStep = 2.0;
+
 class ColorState extends State<ColorPage> {
   double _redValue = 0;
   double _greenValue = 0;
@@ -29,6 +34,7 @@ class ColorState extends State<ColorPage> {
   double _offValue = 0;
   double progress = 0.0;
   Timer timer;
+
   void start() {
     if (progress == 100.0)
       setState(() => progress = 0.0);
@@ -40,8 +46,11 @@ class ColorState extends State<ColorPage> {
           setState(() => progress = progress + kStep);
       });
   }
+
   @override
   Widget build(BuildContext context) {
+    //设置适配尺寸 (填入设计稿中设备的屏幕尺寸) 假如设计稿是按iPhone6的尺寸设计的(iPhone6 750*1334)
+    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
     return Scaffold(
         body: SingleChildScrollView(
       padding: EdgeInsets.all(16),
@@ -69,11 +78,17 @@ class ColorState extends State<ColorPage> {
               ),
             ],
           ),
-          ColorPicker(),
-          ProgressButton(
-            key: Key('progressButton'),
-            percentProgress: progress,
-            onPressed: start,
+          Stack(
+            children: <Widget>[
+              Hue(
+                size: Size(ScreenUtil().setWidth(690), 100),
+              ),
+              ColorMainPicker(
+                size: Size(ScreenUtil().setWidth(690), 100),
+                onChanged: (offset){
+
+                },)
+            ],
           ),
           Padding(
             padding: EdgeInsets.only(left: 10),
